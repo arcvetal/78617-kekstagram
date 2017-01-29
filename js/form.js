@@ -22,13 +22,13 @@ resizeWindow.setAttribute('value', 100);
 var valueWindow = resizeWindow.getAttribute('value');
 
 resizeBtnDecr.addEventListener('click', function () {
-  if (valueWindow == 100) {
+  if (valueWindow === 100) {
     resizeWindow.setAttribute('value', 75);
   }
 });
 
 resizeBtnDecr.addEventListener('click', function () {
-  if (valueWindow == 75) {
+  if (valueWindow === 75) {
     resizeWindow.setAttribute('value', 50);
   }
 });
