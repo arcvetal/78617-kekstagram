@@ -13,41 +13,50 @@ var filterMarvin = document.querySelector('#upload-filter-marvin');
 var filterPhobos = document.querySelector('#upload-filter-phobos');
 var filterHeat = document.querySelector('#upload-filter-heat');
 
-var resizeWindow = document.querySelector('.upload-resize-controls-value');
+var scaleWindow = document.querySelector('.upload-resize-controls-value');
 var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
 var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
 
-
-resizeWindow.setAttribute('value', 100);
-var valueWindow = resizeWindow.getAttribute('value');
-
-resizeBtnDecr.addEventListener('click', function () {
-  if (valueWindow === 100) {
-    resizeWindow.setAttribute('value', 75);
+function zoom() {
+  if (+scaleWindow.value === 75) {
+    imgPreview.style.transform = 'scale(0.75)';
+  } else if (+scaleWindow.value === 50) {
+    imgPreview.style.transform = 'scale(0.5)';
+  } else if (+scaleWindow.value === 25) {
+    imgPreview.style.transform = 'scale(0.25)';
+  } else {
+    imgPreview.style.transform = 'scale(1)';
   }
-});
+}
+
+function deleteFilters() {
+  imgPreview.classList.remove('filter-chrome');
+  imgPreview.classList.remove('filter-sepia');
+  imgPreview.classList.remove('filter-marvin');
+  imgPreview.classList.remove('filter-phobos');
+  imgPreview.classList.remove('filter-heat');
+}
+
+scaleWindow.setAttribute('value', 100);
+imgPreview.setAttribute('transform', 'scale(1)');
+
+// console.log();
 
 resizeBtnDecr.addEventListener('click', function () {
-  if (valueWindow === 75) {
-    resizeWindow.setAttribute('value', 50);
-  }
-});
-
-resizeBtnDecr.addEventListener('click', function () {
-  if (valueWindow === 50) {
-    resizeWindow.setAttribute('value', 25);
+  if (scaleWindow.value > 25) {
+    scaleWindow.value = (scaleWindow.value - 25);
+    zoom();
   }
 });
 
 
 resizeBtnIncr.addEventListener('click', function () {
-  if (valueWindow === 75) {
-    resizeWindow.setAttribute('value', 100);
+  if (scaleWindow.value < 100) {
+    scaleWindow.value = (+scaleWindow.value + 25);
+    zoom();
   }
 });
-// console.log(typeof valueWindow);
 
-// console.log(filterChrome);
 uploadFile.addEventListener('click', function () {
   cropping.classList.remove('invisible');
   download.classList.add('invisible');
@@ -59,49 +68,30 @@ btnClose.addEventListener('click', function () {
 });
 
 filterNone.addEventListener('click', function () {
-  imgPreview.classList.remove('filter-chrome');
-  imgPreview.classList.remove('filter-sepia');
-  imgPreview.classList.remove('filter-marvin');
-  imgPreview.classList.remove('filter-phobos');
-  imgPreview.classList.remove('filter-heat');
+  deleteFilters();
 });
 
 filterChrome.addEventListener('click', function () {
+  deleteFilters();
   imgPreview.classList.add('filter-chrome');
-  imgPreview.classList.remove('filter-sepia');
-  imgPreview.classList.remove('filter-marvin');
-  imgPreview.classList.remove('filter-phobos');
-  imgPreview.classList.remove('filter-heat');
 });
 
 filterSepia.addEventListener('click', function () {
+  deleteFilters();
   imgPreview.classList.add('filter-sepia');
-  imgPreview.classList.remove('filter-chrome');
-  imgPreview.classList.remove('filter-marvin');
-  imgPreview.classList.remove('filter-phobos');
-  imgPreview.classList.remove('filter-heat');
 });
 
 filterMarvin.addEventListener('click', function () {
+  deleteFilters();
   imgPreview.classList.add('filter-marvin');
-  imgPreview.classList.remove('filter-chrome');
-  imgPreview.classList.remove('filter-sepia');
-  imgPreview.classList.remove('filter-phobos');
-  imgPreview.classList.remove('filter-heat');
 });
 
 filterPhobos.addEventListener('click', function () {
+  deleteFilters();
   imgPreview.classList.add('filter-phobos');
-  imgPreview.classList.remove('filter-chrome');
-  imgPreview.classList.remove('filter-sepia');
-  imgPreview.classList.remove('filter-marvin');
-  imgPreview.classList.remove('filter-heat');
 });
 
 filterHeat.addEventListener('click', function () {
+  deleteFilters();
   imgPreview.classList.add('filter-heat');
-  imgPreview.classList.remove('filter-chrome');
-  imgPreview.classList.remove('filter-sepia');
-  imgPreview.classList.remove('filter-marvin');
-  imgPreview.classList.remove('filter-phobos');
 });
