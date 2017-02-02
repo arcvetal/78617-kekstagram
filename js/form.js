@@ -24,10 +24,10 @@ function clickFilter(filter) {
 
 function toggleFilter(filter) {
   for (i = 0; i < filters.length; i++) {
-    photo.classList.remove('filters[i].id.slice(7)');
+    photo.classList.remove('filter-' + filters[i].value);
   }
 
-  photo.classList.add('filter.id.slice(7)');
+  photo.classList.add('filter-' + filter.value);
 }
 
 scaleWindow.setAttribute('value', 100);
