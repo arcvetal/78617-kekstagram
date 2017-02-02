@@ -12,10 +12,6 @@ var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec')
 
 var filters = document.querySelectorAll('input[name=upload-filter]');
 
-for (var i = 0; i < filters.length; i++) {
-  clickFilter(filters[i]);
-}
-
 function clickFilter(filter) {
   filter.addEventListener('click', function () {
     toggleFilter(filter);
@@ -30,8 +26,6 @@ function toggleFilter(filter) {
   photo.classList.add('filter-' + filter.value);
 }
 
-scaleWindow.setAttribute('value', 100);
-
 function makeTransform() {
   for (i = 1; i < 4; i++) {
     photo.classList.remove('transform' + 25 * i);
@@ -39,6 +33,12 @@ function makeTransform() {
 
   photo.classList.add('transform' + scaleWindow.value);
 }
+
+for (var i = 0; i < filters.length; i++) {
+  clickFilter(filters[i]);
+}
+
+scaleWindow.setAttribute('value', 100);
 
 resizeBtnDecr.addEventListener('click', function () {
   if (scaleWindow.value > 25) {
