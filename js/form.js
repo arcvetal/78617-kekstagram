@@ -51,6 +51,8 @@ filterControls.addEventListener('keydown', function (event) {
 
 scaleWindow.setAttribute('value', 100);
 
+cropping.setAttribute('role', 'dialog');
+
 //  Добавим фильтрам атрибут ТАБИНДЕКС!!!
 
 filterControls.setAttribute('tabindex', '0');
