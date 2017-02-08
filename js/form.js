@@ -44,6 +44,33 @@ function closeDialogWindow() {
   download.classList.remove('invisible');
 }
 
+function addFiltersAtrib(filter) {
+  filter.setAttribute('role', 'button');
+  filter.setAttribute('aria-label', 'filter-' + filter.value);
+}
+
+for (i = 0; i < filters.length; i++) {
+  addFiltersAtrib(filters[i]);
+}
+
+for (var i = 0; i < filterLabels.length; i++) {
+  setTabIndex(filterLabels[i], i);
+}
+
+function setTabIndex(filterLabel, n) {
+  filterLabel.setAttribute('tabindex', 0);
+}
+
+function setAriaVisibility() {
+  if (!cropping.classList.contains('invisible')) {
+    cropping.setAttribute('aria-hidden', 'false');
+  } else {
+    cropping.setAttribute('aria-hidden', 'true');
+  }
+}
+
+filterControls.setAttribute('tabindex', '0');
+
 filterControls.addEventListener('click', function (event) {
   toggleFilter(event);
 });
@@ -56,33 +83,6 @@ filterControls.addEventListener('keydown', function (event) {
     toggleFilter(event);
   }
 });
-
-function addFiltersAtrib(filter) {
-  filter.setAttribute('role', 'button');
-  filter.setAttribute('aria-label', 'filter-' + filter.value);
-}
-
-for (i = 0; i < filters.length; i++) {
-  addFiltersAtrib(filters[i]);
-}
-
-scaleWindow.setAttribute('value', 100);
-
-cropping.setAttribute('role', 'dialog');
-cropping.setAttribute('aria-label', 'uploadWindow');
-
-//  Добавим фильтрам атрибут ТАБИНДЕКС!!!
-
-filterControls.setAttribute('tabindex', '0');
-
-for (var i = 0; i < filterLabels.length; i++) {
-  setTabIndex(filterLabels[i], i);
-}
-
-
-function setTabIndex(filterLabel, n) {
-  filterLabel.setAttribute('tabindex', 0);
-}
 
 resizeBtnDecr.addEventListener('click', function () {
   if (scaleWindow.value > 25) {
@@ -101,13 +101,16 @@ resizeBtnIncr.addEventListener('click', function () {
 uploadFile.addEventListener('click', function () {
   cropping.classList.remove('invisible');
   download.classList.add('invisible');
+  setAriaVisibility();
   document.addEventListener('keydown', function (e) {
     if (e.keyCode === ESC_KEY_CODE) {
       closeDialogWindow();
+      setAriaVisibility();
     }
   });
 });
 
 btnClose.addEventListener('click', function () {
   closeDialogWindow();
+  setAriaVisibility();
 });
