@@ -7,7 +7,7 @@ var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
 var filterWrapper = cropping.querySelector('.upload-filter-controls');
 
-var scaleWindow = cropping.querySelector('.upload-resize-controls-value');
+// var scaleWindow = cropping.querySelector('.upload-resize-controls-value');
 var resizeBtnIncr = cropping.querySelector('.upload-resize-controls-button-inc');
 var resizeBtnDecr = cropping.querySelector('.upload-resize-controls-button-dec');
 
@@ -30,13 +30,13 @@ var ESC_KEY_CODE = 27;
 //     }
 //   }
 // }
-
-function makeTransform() {
-  for (var i = 1; i < 4; i++) {
-    photo.classList.remove('transform' + 25 * i);
-  }
-  photo.classList.add('transform' + scaleWindow.value);
-}
+//
+// function makeTransform() {
+//   for (var i = 1; i < 4; i++) {
+//     photo.classList.remove('transform' + 25 * i);
+//   }
+//   photo.classList.add('transform' + scaleWindow.value);
+// }
 
 function closeDialogWindow() {
   cropping.classList.add('invisible');
@@ -52,7 +52,7 @@ function setAriaVisibility() {
 }
 
 filterWrapper.addEventListener('click', function (event) {
-  initializeFilters(photo, filterWrapper, document.querySelectorAll('input[name=upload-filter]'));
+  window.initializeFilters(photo, filterWrapper, document.querySelectorAll('input[name=upload-filter]'));
 });
 
 filterWrapper.addEventListener('keydown', function (event) {
@@ -60,13 +60,13 @@ filterWrapper.addEventListener('keydown', function (event) {
     var inputId = event.target.htmlFor;
     var filterInput = filterWrapper.querySelector('#' + inputId);
     filterInput.checked = true;
-    initializeFilters(photo, filterWrapper, document.querySelectorAll('input[name=upload-filter]'));
+    window.initializeFilters(photo, filterWrapper, document.querySelectorAll('input[name=upload-filter]'));
   }
 });
 
 resizeBtnDecr.addEventListener('click', function () {
 
-  createScale('.filter-image-preview', '.upload-resize-controls-value', 25);
+  window.createScale('.filter-image-preview', '.upload-resize-controls-value', 25);
   // if (scaleWindow.value > 25) {
   //   scaleWindow.value = +scaleWindow.value - 25;
   //   makeTransform();
@@ -75,7 +75,7 @@ resizeBtnDecr.addEventListener('click', function () {
 
 resizeBtnIncr.addEventListener('click', function () {
 
-  createScale('.filter-image-preview', '.upload-resize-controls-value', 25);
+  window.createScale('.filter-image-preview', '.upload-resize-controls-value', 25);
   // if (scaleWindow.value < 100) {
   //   scaleWindow.value = +scaleWindow.value + 25;
   //   makeTransform();
