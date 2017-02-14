@@ -6,12 +6,28 @@ var download = document.querySelector('#upload-select-image');
 var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
 var filterWrapper = cropping.querySelector('.upload-filter-controls');
+var photoFilters = document.querySelectorAll('input[name=upload-filter]');
+var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
 var ESC_KEY_CODE = 27;
 
-function closeDialogWindow() {
-  cropping.classList.add('invisible');
-  download.classList.remove('invisible');
+function toggleDialogWindow(show, hide) {
+  hide.classList.add('invisible');
+  show.classList.remove('invisible');
+}
+
+function resetScale() {
+  for (var i = 1; i < 4; i++) {
+    photo.classList.remove('transform' + 25 * i);
+  }
+  scaleBlock.value = 100;
+}
+
+function resetFilters() {
+  for (var i = 0; i < photoFilters.length; i++) {
+    photo.classList.remove('filter-' + photoFilters[i].value);
+  }
+  photoFilters[0].checked = true;
 }
 
 function setAriaVisibility() {
@@ -22,23 +38,26 @@ function setAriaVisibility() {
   }
 }
 
-window.initializeFilters(photo, filterWrapper, document.querySelectorAll('input[name=upload-filter]'));
+window.initializeFilters(photo, filterWrapper, photoFilters);
 
-window.createScale('.upload-resize-controls-button-inc', '.upload-resize-controls-button-dec', '.filter-image-preview', '.upload-resize-controls-value');
+window.initializeScale(photo, scaleBlock, 25);
 
 uploadFile.addEventListener('click', function () {
-  cropping.classList.remove('invisible');
-  download.classList.add('invisible');
+  toggleDialogWindow(cropping, download);
   setAriaVisibility();
   document.addEventListener('keydown', function (e) {
     if (e.keyCode === ESC_KEY_CODE) {
-      closeDialogWindow();
+      toggleDialogWindow(download, cropping);
+      resetScale();
+      resetFilters();
       setAriaVisibility();
     }
   });
 });
 
 btnClose.addEventListener('click', function () {
-  closeDialogWindow();
+  toggleDialogWindow(download, cropping);
+  resetScale();
+  resetFilters();
   setAriaVisibility();
 });

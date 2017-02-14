@@ -1,29 +1,28 @@
 'use strict';
 
-window.createScale = function (btnIncr, btnDecr, imagePreview, scale) {
-  var scaleWindow = document.querySelector(scale);
-  var photo = document.querySelector(imagePreview);
+window.initializeScale = function (imagePreview, scale, scaleStep) {
 
-  var resizeBtnIncr = document.querySelector(btnIncr);
-  var resizeBtnDecr = document.querySelector(btnDecr);
+  var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
+  var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
 
   function makeTransform() {
     for (var i = 1; i < 4; i++) {
-      photo.classList.remove('transform' + 25 * i);
+      imagePreview.classList.remove('transform' + scaleStep * i);
     }
-    photo.classList.add('transform' + scaleWindow.value);
+    imagePreview.classList.add('transform' + scale.value);
+    imagePreview.classList.remove('transform100');
   }
 
   resizeBtnIncr.addEventListener('click', function () {
-    if (scaleWindow.value < 100) {
-      scaleWindow.value = +scaleWindow.value + 25;
+    if (scale.value < 100) {
+      scale.value = +scale.value + scaleStep;
       makeTransform();
     }
   });
 
   resizeBtnDecr.addEventListener('click', function () {
-    if (scaleWindow.value > 25) {
-      scaleWindow.value = +scaleWindow.value - 25;
+    if (scale.value > 25) {
+      scale.value = +scale.value - scaleStep;
       makeTransform();
     }
   });
