@@ -1,15 +1,14 @@
 'use strict';
 
-window.initializeFilters = function (imagePreview, blockOfFilters, filtersArr) {
+window.initializeFilters = (function (image, wrapperOfFilters, filters) {
 
-  var image = imagePreview;
-  var wrapperOfFilters = blockOfFilters;
-  var filters = filtersArr;
   var inputId;
   var filterInput;
-  var ENTER_KEY_CODE = 13;
+  // console.log(image);
+  // console.log(wrapperOfFilters);
+  // console.log(filters);
 
-  function toggleFilter() {
+  return function toggleFilter() {
     for (var i = 0; i < filters.length; i++) {
       image.classList.remove('filter-' + filters[i].value);
     }
@@ -21,15 +20,7 @@ window.initializeFilters = function (imagePreview, blockOfFilters, filtersArr) {
     } else if (event.target.checked) {
       image.classList.add('filter-' + event.target.value);
     }
-  }
+  };
+})();
 
-  wrapperOfFilters.addEventListener('click', function (event) {
-    toggleFilter();
-  });
-
-  wrapperOfFilters.addEventListener('keydown', function (event) {
-    if (event.keyCode === ENTER_KEY_CODE) {
-      toggleFilter();
-    }
-  });
-};
+// console.log(window.initializeFilters);
