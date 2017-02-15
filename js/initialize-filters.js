@@ -1,6 +1,6 @@
 'use strict';
 
-window.initializeFilters = (function (image, wrapperOfFilters, filters) {
+window.initializeFilters = (function () {
 
   var inputId;
   var filterInput;
@@ -8,7 +8,7 @@ window.initializeFilters = (function (image, wrapperOfFilters, filters) {
   // console.log(wrapperOfFilters);
   // console.log(filters);
 
-  return function toggleFilter() {
+  return function toggleFilter(image, wrapperOfFilters, filters) {
     for (var i = 0; i < filters.length; i++) {
       image.classList.remove('filter-' + filters[i].value);
     }

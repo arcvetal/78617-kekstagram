@@ -9,6 +9,9 @@ var filterWrapper = cropping.querySelector('.upload-filter-controls');
 var photoFilters = document.querySelectorAll('input[name=upload-filter]');
 var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
+var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
+var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
+
 var ESC_KEY_CODE = 27;
 var ENTER_KEY_CODE = 13;
 
@@ -54,6 +57,20 @@ filterWrapper.addEventListener('keydown', function (event) {
 });
 
 // window.initializeScale(photo, scaleBlock, 25);
+
+resizeBtnIncr.addEventListener('click', function () {
+  if (scaleBlock.value < 100) {
+    scaleBlock.value = +scaleBlock.value + 25;
+    window.initializeScale(photo, scaleBlock, 25);
+  }
+});
+
+resizeBtnDecr.addEventListener('click', function () {
+  if (scaleBlock.value > 25) {
+    scaleBlock.value = +scaleBlock.value - 25;
+    window.initializeScale(photo, scaleBlock, 25);
+  }
+});
 
 uploadFile.addEventListener('click', function () {
   toggleDialogWindow(cropping, download);
