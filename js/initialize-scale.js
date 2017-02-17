@@ -1,27 +1,24 @@
 'use strict';
 
-(function (scale, image, scaleStep) {
+(function (scale, scaleStep, changeScale) {
 
   var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
   var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
 
-  function makeTransform() {
-    if (scale.value <= 100 && scale.value >= 25) {
-      image.setAttribute('style', 'transform: scale(' + scale.value / 100 + ')');
-    }
-  }
+  var UPPER_LIMIT = 100;
+  var LOWER_LIMIT = 25;
 
   resizeBtnIncr.addEventListener('click', function () {
-    if (scale.value < 100) {
+    if (scale.value < UPPER_LIMIT) {
       scale.value = +scale.value + scaleStep;
-      makeTransform();
+      changeScale();
     }
   });
 
   resizeBtnDecr.addEventListener('click', function () {
-    if (scale.value > 25) {
+    if (scale.value > LOWER_LIMIT) {
       scale.value = +scale.value - scaleStep;
-      makeTransform();
+      changeScale();
     }
   });
-})(window.scaleBlock, window.photo, 25);
+})(window.scaleBlock, 25, window.makeTransform);
