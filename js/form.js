@@ -5,15 +5,10 @@ var cropping = document.querySelector('.upload-overlay');
 var download = document.querySelector('#upload-select-image');
 var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
-var filterWrapper = cropping.querySelector('.upload-filter-controls');
 var photoFilters = document.querySelectorAll('input[name=upload-filter]');
 var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
-var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
-var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
-
 var ESC_KEY_CODE = 27;
-var ENTER_KEY_CODE = 13;
 
 function toggleDialogWindow(show, hide) {
   hide.classList.add('invisible');
@@ -21,9 +16,7 @@ function toggleDialogWindow(show, hide) {
 }
 
 function resetScale() {
-  for (var i = 1; i < 4; i++) {
-    photo.classList.remove('transform' + 25 * i);
-  }
+  photo.removeAttribute('style');
   scaleBlock.value = 100;
 }
 
@@ -41,36 +34,6 @@ function setAriaVisibility() {
     cropping.setAttribute('aria-hidden', 'true');
   }
 }
-
-// window.initializeFilters(photo, filterWrapper, photoFilters);
-
-
-filterWrapper.addEventListener('click', function (event) {
-  window.initializeFilters(photo, filterWrapper, photoFilters);
-});
-
-
-filterWrapper.addEventListener('keydown', function (event) {
-  if (event.keyCode === ENTER_KEY_CODE) {
-    window.initializeFilters(photo, filterWrapper, photoFilters);
-  }
-});
-
-// window.initializeScale(photo, scaleBlock, 25);
-
-resizeBtnIncr.addEventListener('click', function () {
-  if (scaleBlock.value < 100) {
-    scaleBlock.value = +scaleBlock.value + 25;
-    window.initializeScale(photo, scaleBlock, 25);
-  }
-});
-
-resizeBtnDecr.addEventListener('click', function () {
-  if (scaleBlock.value > 25) {
-    scaleBlock.value = +scaleBlock.value - 25;
-    window.initializeScale(photo, scaleBlock, 25);
-  }
-});
 
 uploadFile.addEventListener('click', function () {
   toggleDialogWindow(cropping, download);

@@ -1,26 +1,34 @@
 'use strict';
 
-window.initializeFilters = (function () {
+(function (image, filters) {
 
+  var filterWrapper = document.querySelector('.upload-filter-controls');
+  var ENTER_KEY_CODE = 13;
   var inputId;
   var filterInput;
-  // console.log(image);
-  // console.log(wrapperOfFilters);
-  // console.log(filters);
 
-  return function toggleFilter(image, wrapperOfFilters, filters) {
+  function toggleFilter() {
     for (var i = 0; i < filters.length; i++) {
       image.classList.remove('filter-' + filters[i].value);
     }
     if (event.target.htmlFor) {
       inputId = event.target.htmlFor;
-      filterInput = wrapperOfFilters.querySelector('#' + inputId);
+      filterInput = filterWrapper.querySelector('#' + inputId);
       filterInput.checked = true;
       image.classList.add('filter-' + filterInput.value);
     } else if (event.target.checked) {
       image.classList.add('filter-' + event.target.value);
     }
-  };
-})();
+  }
 
-// console.log(window.initializeFilters);
+  filterWrapper.addEventListener('click', function (event) {
+    toggleFilter();
+  });
+
+
+  filterWrapper.addEventListener('keydown', function (event) {
+    if (event.keyCode === ENTER_KEY_CODE) {
+      toggleFilter();
+    }
+  });
+})(window.photo, window.photoFilters);
