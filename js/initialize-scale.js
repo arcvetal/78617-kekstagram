@@ -2,25 +2,28 @@
 
 window.initializeScale = (function () {
 
-  return function makeTransform(imagePreview, scale, scaleStep) {
-    for (var i = 1; i < 4; i++) {
-      imagePreview.classList.remove('transform' + scaleStep * i);
+  function scaleElement(prmScale, prmScaleStep, prmUpLimit, prmLowLimit, event) {
+    var scaleValue = prmScale.value;
+    if (event.isIncremented === true && scaleValue < prmUpLimit) {
+      prmScale.value = +scaleValue + prmScaleStep;
+    } else if (event.isDecremented === true && scaleValue > prmLowLimit) {
+      prmScale.value = +scaleValue - prmScaleStep;
     }
-    imagePreview.classList.add('transform' + scale.value);
-    imagePreview.classList.remove('transform100');
-  };
+  }
 
-  // resizeBtnIncr.addEventListener('click', function () {
-  //   if (scale.value < 100) {
-  //     scale.value = +scale.value + scaleStep;
-  //     makeTransform();
-  //   }
-  // });
-  //
-  // resizeBtnDecr.addEventListener('click', function () {
-  //   if (scale.value > 25) {
-  //     scale.value = +scale.value - scaleStep;
-  //     makeTransform();
-  //   }
-  // });
+  return function (params) {
+    params.btnIncr.addEventListener('click', function (event) {
+      event.isIncremented = true;
+      event.isDecremented = false;
+      scaleElement(params.scale, params.scaleStep, params.uppperLimit, params.lowerLimit, event);
+      params.callback(params.image);
+    });
+
+    params.btnDecr.addEventListener('click', function (event) {
+      event.isIncremented = false;
+      event.isDecremented = true;
+      scaleElement(params.scale, params.scaleStep, params.uppperLimit, params.lowerLimit, event);
+      params.callback(params.image);
+    });
+  };
 })();

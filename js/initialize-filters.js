@@ -1,26 +1,15 @@
 'use strict';
 
 window.initializeFilters = (function () {
+  return function (params) {
+    params.blockOfFilters.addEventListener('click', function (event) {
+      params.callback(params.image, params.filters, params.blockOfFilters);
+    });
 
-  var inputId;
-  var filterInput;
-  // console.log(image);
-  // console.log(wrapperOfFilters);
-  // console.log(filters);
-
-  return function toggleFilter(image, wrapperOfFilters, filters) {
-    for (var i = 0; i < filters.length; i++) {
-      image.classList.remove('filter-' + filters[i].value);
-    }
-    if (event.target.htmlFor) {
-      inputId = event.target.htmlFor;
-      filterInput = wrapperOfFilters.querySelector('#' + inputId);
-      filterInput.checked = true;
-      image.classList.add('filter-' + filterInput.value);
-    } else if (event.target.checked) {
-      image.classList.add('filter-' + event.target.value);
-    }
+    params.blockOfFilters.addEventListener('keydown', function (event) {
+      if (event.keyCode === params.enterKeyCode) {
+        params.callback(params.image, params.filters, params.blockOfFilters);
+      }
+    });
   };
 })();
-
-// console.log(window.initializeFilters);

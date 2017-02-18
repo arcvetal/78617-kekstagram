@@ -5,15 +5,11 @@ var cropping = document.querySelector('.upload-overlay');
 var download = document.querySelector('#upload-select-image');
 var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
-var filterWrapper = cropping.querySelector('.upload-filter-controls');
+// var filterWrapper = document.querySelector('.upload-filter-controls');
 var photoFilters = document.querySelectorAll('input[name=upload-filter]');
 var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
-var resizeBtnIncr = document.querySelector('.upload-resize-controls-button-inc');
-var resizeBtnDecr = document.querySelector('.upload-resize-controls-button-dec');
-
 var ESC_KEY_CODE = 27;
-var ENTER_KEY_CODE = 13;
 
 function toggleDialogWindow(show, hide) {
   hide.classList.add('invisible');
@@ -21,9 +17,7 @@ function toggleDialogWindow(show, hide) {
 }
 
 function resetScale() {
-  for (var i = 1; i < 4; i++) {
-    photo.classList.remove('transform' + 25 * i);
-  }
+  photo.removeAttribute('style');
   scaleBlock.value = 100;
 }
 
@@ -41,36 +35,6 @@ function setAriaVisibility() {
     cropping.setAttribute('aria-hidden', 'true');
   }
 }
-
-// window.initializeFilters(photo, filterWrapper, photoFilters);
-
-
-filterWrapper.addEventListener('click', function (event) {
-  window.initializeFilters(photo, filterWrapper, photoFilters);
-});
-
-
-filterWrapper.addEventListener('keydown', function (event) {
-  if (event.keyCode === ENTER_KEY_CODE) {
-    window.initializeFilters(photo, filterWrapper, photoFilters);
-  }
-});
-
-// window.initializeScale(photo, scaleBlock, 25);
-
-resizeBtnIncr.addEventListener('click', function () {
-  if (scaleBlock.value < 100) {
-    scaleBlock.value = +scaleBlock.value + 25;
-    window.initializeScale(photo, scaleBlock, 25);
-  }
-});
-
-resizeBtnDecr.addEventListener('click', function () {
-  if (scaleBlock.value > 25) {
-    scaleBlock.value = +scaleBlock.value - 25;
-    window.initializeScale(photo, scaleBlock, 25);
-  }
-});
 
 uploadFile.addEventListener('click', function () {
   toggleDialogWindow(cropping, download);
@@ -90,4 +54,37 @@ btnClose.addEventListener('click', function () {
   resetScale();
   resetFilters();
   setAriaVisibility();
+});
+
+window.initializeScale({
+  btnIncr: document.querySelector('.upload-resize-controls-button-inc'),
+  btnDecr: document.querySelector('.upload-resize-controls-button-dec'),
+  uppperLimit: 100,
+  lowerLimit: 25,
+  scale: document.querySelector('.upload-resize-controls-value'),
+  scaleStep: 25,
+  image: document.querySelector('.filter-image-preview'),
+  callback: function (prmImage) {
+    prmImage.setAttribute('style', 'transform: scale(' + scaleBlock.value / 100 + ')');
+  },
+});
+
+window.initializeFilters({
+  blockOfFilters: document.querySelector('.upload-filter-controls'),
+  enterKeyCode: 13,
+  image: document.querySelector('.filter-image-preview'),
+  filters: document.querySelectorAll('input[name=upload-filter]'),
+  callback: function (prmImage, prmFilters, prmBlockOfFilters) {
+    var filterInput;
+    for (var i = 0; i < prmFilters.length; i++) {
+      prmImage.classList.remove('filter-' + prmFilters[i].value);
+    }
+    if (event.target.tagName === 'LABEL') {
+      filterInput = prmBlockOfFilters.querySelector('#' + event.target.htmlFor);
+      filterInput.checked = true;
+      prmImage.classList.add('filter-' + filterInput.value);
+    } else if (event.target.checked) {
+      prmImage.classList.add('filter-' + event.target.value);
+    }
+  }
 });
