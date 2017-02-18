@@ -1,17 +1,15 @@
 'use strict';
 
-(function (image, filters, blockOfFilters, changeFilter) {
+window.initializeFilters = (function () {
+  return function (params) {
+    params.blockOfFilters.addEventListener('click', function (event) {
+      params.callback(params.image, params.filters, params.blockOfFilters);
+    });
 
-  var ENTER_KEY_CODE = 13;
-
-  blockOfFilters.addEventListener('click', function (event) {
-    changeFilter();
-  });
-
-
-  blockOfFilters.addEventListener('keydown', function (event) {
-    if (event.keyCode === ENTER_KEY_CODE) {
-      changeFilter();
-    }
-  });
-})(window.photo, window.photoFilters, window.filterWrapper, window.toggleFilter);
+    params.blockOfFilters.addEventListener('keydown', function (event) {
+      if (event.keyCode === params.enterKeyCode) {
+        params.callback(params.image, params.filters, params.blockOfFilters);
+      }
+    });
+  };
+})();

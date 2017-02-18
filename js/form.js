@@ -5,7 +5,7 @@ var cropping = document.querySelector('.upload-overlay');
 var download = document.querySelector('#upload-select-image');
 var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
-var filterWrapper = document.querySelector('.upload-filter-controls');
+// var filterWrapper = document.querySelector('.upload-filter-controls');
 var photoFilters = document.querySelectorAll('input[name=upload-filter]');
 var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
@@ -16,33 +16,10 @@ function toggleDialogWindow(show, hide) {
   show.classList.remove('invisible');
 }
 
-window.makeTransform = function () {
-  if (scaleBlock.value <= 100 && scaleBlock.value >= 25) {
-    photo.setAttribute('style', 'transform: scale(' + scaleBlock.value / 100 + ')');
-  }
-};
-
 function resetScale() {
   photo.removeAttribute('style');
   scaleBlock.value = 100;
 }
-
-window.toggleFilter = function () {
-  var inputId;
-  var filterInput;
-
-  for (var i = 0; i < photoFilters.length; i++) {
-    photo.classList.remove('filter-' + photoFilters[i].value);
-  }
-  if (event.target.htmlFor) {
-    inputId = event.target.htmlFor;
-    filterInput = filterWrapper.querySelector('#' + inputId);
-    filterInput.checked = true;
-    photo.classList.add('filter-' + filterInput.value);
-  } else if (event.target.checked) {
-    photo.classList.add('filter-' + event.target.value);
-  }
-};
 
 function resetFilters() {
   for (var i = 0; i < photoFilters.length; i++) {
@@ -77,4 +54,37 @@ btnClose.addEventListener('click', function () {
   resetScale();
   resetFilters();
   setAriaVisibility();
+});
+
+window.initializeScale({
+  btnIncr: document.querySelector('.upload-resize-controls-button-inc'),
+  btnDecr: document.querySelector('.upload-resize-controls-button-dec'),
+  uppperLimit: 100,
+  lowerLimit: 25,
+  scale: document.querySelector('.upload-resize-controls-value'),
+  scaleStep: 25,
+  image: document.querySelector('.filter-image-preview'),
+  callback: function (prmImage) {
+    prmImage.setAttribute('style', 'transform: scale(' + scaleBlock.value / 100 + ')');
+  },
+});
+
+window.initializeFilters({
+  blockOfFilters: document.querySelector('.upload-filter-controls'),
+  enterKeyCode: 13,
+  image: document.querySelector('.filter-image-preview'),
+  filters: document.querySelectorAll('input[name=upload-filter]'),
+  callback: function (prmImage, prmFilters, prmBlockOfFilters) {
+    var filterInput;
+    for (var i = 0; i < prmFilters.length; i++) {
+      prmImage.classList.remove('filter-' + prmFilters[i].value);
+    }
+    if (event.target.tagName === 'LABEL') {
+      filterInput = prmBlockOfFilters.querySelector('#' + event.target.htmlFor);
+      filterInput.checked = true;
+      prmImage.classList.add('filter-' + filterInput.value);
+    } else if (event.target.checked) {
+      prmImage.classList.add('filter-' + event.target.value);
+    }
+  }
 });
