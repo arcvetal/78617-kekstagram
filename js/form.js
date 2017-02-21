@@ -88,3 +88,5 @@ window.initializeFilters({
     }
   }
 });
+
+// window.load();
