@@ -19,8 +19,7 @@ window.showGallery = (function () {
     });
   }
 
-  return function showGallery(e, param) {
-    e.preventDefault();
+  return function showGallery(param) {
     galleryOverlay.classList.remove('invisible');
 
     galleryImage.setAttribute('src', param.link);
@@ -29,4 +28,4 @@ window.showGallery = (function () {
 
     closeGallery();
   };
-});
+})();

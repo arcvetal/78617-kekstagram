@@ -23,6 +23,9 @@ window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/da
           likesCount: pictures[i].likes,
           commentsCount: pictures[i].comments.length
         };
-        picture.addEventListener('click', window.showGallery(pictureBlock));
+        picture.addEventListener('click', function (evt) {
+          evt.preventDefault();
+          window.showGallery(pictureBlock);
+        });
       }
     });
