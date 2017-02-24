@@ -3,7 +3,6 @@
 window.showGallery = (function () {
   var galleryOverlay = document.querySelector('.gallery-overlay');
   var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
-
   var galleryImage = galleryOverlay.querySelector('.gallery-overlay-image');
   var galleryLikes = galleryOverlay.querySelector('.likes-count');
   var galleryComments = galleryOverlay.querySelector('.comments-count');
@@ -13,7 +12,7 @@ window.showGallery = (function () {
       galleryOverlay.classList.add('invisible');
     });
     document.addEventListener('keydown', function (e) {
-      if (e.keyCode === 27 && !galleryOverlay.classList.contains('invisible')) {
+      if (e.keyCode === 27 || 13 && !galleryOverlay.classList.contains('invisible')) {
         galleryOverlay.classList.add('invisible');
       }
     });
@@ -21,7 +20,9 @@ window.showGallery = (function () {
 
   return function showGallery(param) {
     galleryOverlay.classList.remove('invisible');
-
+    setTimeout(function () {
+      galleryOverlayClose.focus();
+    }, 10);
     galleryImage.setAttribute('src', param.link);
     galleryLikes.textContent = param.likesCount;
     galleryComments.textContent = param.commentsCount;

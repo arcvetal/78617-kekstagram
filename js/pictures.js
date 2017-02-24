@@ -2,101 +2,96 @@
 
 window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data',
     function (e) {
-      var pictures = [];
-      pictures = JSON.parse(e.target.response);
 
+      var pictures = JSON.parse(e.target.response);
       var templateElement = document.querySelector('#picture-template');
-      var pictureClone = templateElement.content.querySelector('.picture');
+      var pictureFrame = templateElement.content.querySelector('.picture');
       var pictureContainer = document.querySelector('.pictures');
-      var previewFilters = document.querySelector('.filters');
-      var pictureArrCommented = cloneArray(pictures);
-      var pictureArrNew = cloneArray(pictures);
+      var pictureFilters = document.querySelector('.filters');
+      var pictureArrCommented = pictures.slice(0);
 
-      var cloneArray = function (oldArr) {
-        var newArr = [];
-        for (var i = 0; i < oldArr.length; i++) {
-          newArr.push(oldArr[i]);
-        }
-        return newArr;
-      };
+      var ENTER_KEY_CODE = 13;
 
-      var sortByMostCommented = function (element) {
-        element.sort(function (left, right) {
+      var sortFunc = function (array) {
+        array.sort(function (left, right) {
           return right.comments.length - left.comments.length;
         });
       };
 
-      var shuffle = (function () {
-        function random(min, max) {
-          var range = max - min + 1;
-          return Math.floor(Math.random() * range) + min;
+      function getRandomArrFromArr(arr, n) {
+        var randomArr = new Array(n);
+        var len = arr.length;
+        var taken = new Array(len);
+        if (n > len) {
+          throw new RangeError('getRandom: more elements taken than available');
         }
+        while (n--) {
+          var x = Math.floor(Math.random() * len);
+          randomArr[n] = arr[x in taken ? taken[x] : x];
+          taken[x] = --len;
+        }
+        return randomArr;
+      }
 
-        return function (arr) {
-          for (var i = 0; i < arr.length - 1; i++) {
-            var randomItem = random(0, arr.length - 1);
-            var v = arr[randomItem];
-            arr[randomItem] = arr[arr.length - 1];
-            arr[arr.length - 1] = v;
-          }
-          return arr;
-        };
-      })();
-
-      var cleanGellery = function () {
-        while (pictureContainer.firstChild) {
-          pictureContainer.removeChild(pictureContainer.firstChild);
+      var cleanGallery = function (param) {
+        while (param.firstChild) {
+          param.removeChild(param.firstChild);
         }
       };
 
-      var showGallery = function (element) {
+      var renderPictures = function (element) {
         element.forEach(function (pictureItem) {
-          var picture = pictureClone.cloneNode(true);
+          var picture = pictureFrame.cloneNode(true);
           var image = picture.querySelector('img');
           var comments = picture.querySelector('.picture-comments');
           var likes = picture.querySelector('.picture-likes');
           image.setAttribute('src', pictureItem.url);
           comments.textContent = pictureItem.comments.length;
           likes.textContent = pictureItem.likes;
+          picture.setAttribute('tabindex', '0');
           pictureContainer.appendChild(picture);
           var pictureBlock = {
             link: pictureItem.url,
             likesCount: pictureItem.likes,
             commentsCount: pictureItem.comments.length
           };
-          picture.addEventListener('click', function (evt) {
-            evt.preventDefault();
+          picture.addEventListener('click', function (event) {
+            event.preventDefault();
             window.showGallery(pictureBlock);
           });
         });
       };
 
-
-      previewFilters.classList.remove('hidden');
-
-      showGallery(pictures);
-
-      previewFilters.addEventListener('click', function (ev) {
-        if (ev.target.htmlFor === 'filter-popular') {
-          cleanGellery();
-          showGallery(pictures);
+      function filterToggle(condition) {
+        switch (condition) {
+          case ('filter-popular'):
+            cleanGallery(pictureContainer);
+            renderPictures(pictures);
+            break;
+          case ('filter-new'):
+            cleanGallery(pictureContainer);
+            renderPictures(getRandomArrFromArr(pictures.slice(0), 10));
+            break;
+          case ('filter-discussed'):
+            cleanGallery(pictureContainer);
+            sortFunc(pictureArrCommented);
+            renderPictures(pictureArrCommented);
+            break;
         }
+      }
+
+      pictureFilters.classList.remove('hidden');
+
+      renderPictures(pictures);
+
+      pictureFilters.addEventListener('click', function (event) {
+        filterToggle(event.target.htmlFor);
       });
 
-      previewFilters.addEventListener('click', function (ev) {
-        if (ev.target.htmlFor === 'filter-new') {
-          cleanGellery();
-          var mixedArray = shuffle(pictureArrNew);
-          mixedArray.length = 10;
-          showGallery(mixedArray);
-        }
-      });
-
-      previewFilters.addEventListener('click', function (ev) {
-        if (ev.target.htmlFor === 'filter-discussed') {
-          cleanGellery();
-          sortByMostCommented(pictureArrCommented);
-          showGallery(pictureArrCommented);
+      pictureFilters.addEventListener('keydown', function (event) {
+        if (event.keyCode === ENTER_KEY_CODE) {
+          event.target.control.checked = true;
+          filterToggle(event.target.htmlFor);
         }
       });
     });

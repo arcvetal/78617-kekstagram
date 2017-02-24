@@ -5,7 +5,6 @@ var cropping = document.querySelector('.upload-overlay');
 var download = document.querySelector('#upload-select-image');
 var btnClose = cropping.querySelector('.upload-form-cancel');
 var photo = cropping.querySelector('.filter-image-preview');
-// var filterWrapper = document.querySelector('.upload-filter-controls');
 var photoFilters = document.querySelectorAll('input[name=upload-filter]');
 var scaleBlock = document.querySelector('.upload-resize-controls-value');
 
@@ -36,7 +35,7 @@ function setAriaVisibility() {
   }
 }
 
-uploadFile.addEventListener('click', function () {
+uploadFile.addEventListener('change', function () {
   toggleDialogWindow(cropping, download);
   setAriaVisibility();
   document.addEventListener('keydown', function (e) {
@@ -88,5 +87,3 @@ window.initializeFilters({
     }
   }
 });
-
-// window.load();
