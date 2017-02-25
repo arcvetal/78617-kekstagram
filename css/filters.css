@@ -9,15 +9,3 @@
   -webkit-filter: contrast(120%) saturate(200%);
           filter: contrast(120%) saturate(200%);
 }
-
-.transform25 {
-  transform: scale(0.25);
-}
-
-.transform50 {
-  transform: scale(0.50);
-}
-
-.transform75 {
-  transform: scale(0.75);
-}
