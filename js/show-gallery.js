@@ -9,23 +9,23 @@ window.showGallery = (function () {
 
   function closeGallery() {
     galleryOverlayClose.addEventListener('click', function () {
-      galleryOverlay.classList.add('invisible');
+      window.helpers.hideElement(galleryOverlay);
     });
-    document.addEventListener('keydown', function (e) {
-      if (e.keyCode === 27 || 13 && !galleryOverlay.classList.contains('invisible')) {
-        galleryOverlay.classList.add('invisible');
+    galleryOverlayClose.addEventListener('keydown', function (e) {
+      if (e.keyCode === window.helpers.ESC_KEY_CODE || window.helpers.ENTER_KEY_CODE && !galleryOverlay.classList.contains('invisible')) {
+        window.helpers.hideElement(galleryOverlay);
       }
     });
   }
 
-  return function showGallery(param) {
-    galleryOverlay.classList.remove('invisible');
+  return function (pictureOptions) {
+    window.helpers.showElement(galleryOverlay);
     setTimeout(function () {
       galleryOverlayClose.focus();
     }, 10);
-    galleryImage.setAttribute('src', param.link);
-    galleryLikes.textContent = param.likesCount;
-    galleryComments.textContent = param.commentsCount;
+    galleryImage.setAttribute('src', pictureOptions.link);
+    galleryLikes.textContent = pictureOptions.likesCount;
+    galleryComments.textContent = pictureOptions.commentsCount;
 
     closeGallery();
   };

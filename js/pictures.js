@@ -1,6 +1,7 @@
 'use strict';
 
-window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data',
+window.load(
+    'https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data',
     function (e) {
 
       var pictures = JSON.parse(e.target.response);
@@ -8,39 +9,11 @@ window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/da
       var pictureFrame = templateElement.content.querySelector('.picture');
       var pictureContainer = document.querySelector('.pictures');
       var pictureFilters = document.querySelector('.filters');
-      var pictureArrCommented = pictures.slice(0);
+      var pictureArrayCommented = pictures.slice(0);
 
-      var ENTER_KEY_CODE = 13;
-
-      var sortFunc = function (array) {
-        array.sort(function (left, right) {
-          return right.comments.length - left.comments.length;
-        });
-      };
-
-      function getRandomArrFromArr(arr, n) {
-        var randomArr = new Array(n);
-        var len = arr.length;
-        var taken = new Array(len);
-        if (n > len) {
-          throw new RangeError('getRandom: more elements taken than available');
-        }
-        while (n--) {
-          var x = Math.floor(Math.random() * len);
-          randomArr[n] = arr[x in taken ? taken[x] : x];
-          taken[x] = --len;
-        }
-        return randomArr;
-      }
-
-      var cleanGallery = function (param) {
-        while (param.firstChild) {
-          param.removeChild(param.firstChild);
-        }
-      };
-
-      var renderPictures = function (element) {
-        element.forEach(function (pictureItem) {
+      var renderPictures = function (pictureArray) {
+        window.helpers.cleanContainer(pictureContainer);
+        pictureArray.forEach(function (pictureItem) {
           var picture = pictureFrame.cloneNode(true);
           var image = picture.querySelector('img');
           var comments = picture.querySelector('.picture-comments');
@@ -50,32 +23,29 @@ window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/da
           likes.textContent = pictureItem.likes;
           picture.setAttribute('tabindex', '0');
           pictureContainer.appendChild(picture);
-          var pictureBlock = {
+          var pictureOptions = {
             link: pictureItem.url,
             likesCount: pictureItem.likes,
             commentsCount: pictureItem.comments.length
           };
           picture.addEventListener('click', function (event) {
             event.preventDefault();
-            window.showGallery(pictureBlock);
+            window.showGallery(pictureOptions);
           });
         });
       };
 
-      function filterToggle(condition) {
-        switch (condition) {
+      function filterPicturesContainer(event) {
+        switch (event.target.htmlFor) {
           case ('filter-popular'):
-            cleanGallery(pictureContainer);
             renderPictures(pictures);
             break;
           case ('filter-new'):
-            cleanGallery(pictureContainer);
-            renderPictures(getRandomArrFromArr(pictures.slice(0), 10));
+            renderPictures(window.helpers.getRandomArrayFromArray(pictures.slice(0), 10));
             break;
           case ('filter-discussed'):
-            cleanGallery(pictureContainer);
-            sortFunc(pictureArrCommented);
-            renderPictures(pictureArrCommented);
+            window.helpers.sortFunc(pictureArrayCommented);
+            renderPictures(pictureArrayCommented);
             break;
         }
       }
@@ -85,13 +55,13 @@ window.load('https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/da
       renderPictures(pictures);
 
       pictureFilters.addEventListener('click', function (event) {
-        filterToggle(event.target.htmlFor);
+        filterPicturesContainer(event);
       });
 
       pictureFilters.addEventListener('keydown', function (event) {
-        if (event.keyCode === ENTER_KEY_CODE) {
+        if (event.keyCode === window.helpers.ENTER_KEY_CODE) {
           event.target.control.checked = true;
-          filterToggle(event.target.htmlFor);
+          filterPicturesContainer(event);
         }
       });
     });

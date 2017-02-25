@@ -1,14 +1,14 @@
 'use strict';
 
 window.initializeFilters = (function () {
-  return function (params) {
-    params.blockOfFilters.addEventListener('click', function (event) {
-      params.callback(params.image, params.filters, params.blockOfFilters);
+  return function (options) {
+    options.blockOfFilters.addEventListener('click', function (event) {
+      options.callback(options.elementForFiltering, options.filters, options.blockOfFilters, event);
     });
 
-    params.blockOfFilters.addEventListener('keydown', function (event) {
-      if (event.keyCode === params.enterKeyCode) {
-        params.callback(params.image, params.filters, params.blockOfFilters);
+    options.blockOfFilters.addEventListener('keydown', function (event) {
+      if (event.keyCode === options.ENTER_KEY_CODE) {
+        options.callback(options.elementForFiltering, options.filters, options.blockOfFilters, event);
       }
     });
   };
