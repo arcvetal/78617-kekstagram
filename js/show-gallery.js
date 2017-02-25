@@ -11,8 +11,8 @@ window.showGallery = (function () {
     galleryOverlayClose.addEventListener('click', function () {
       window.helpers.hideElement(galleryOverlay);
     });
-    galleryOverlayClose.addEventListener('keydown', function (e) {
-      if (e.keyCode === window.helpers.ESC_KEY_CODE || window.helpers.ENTER_KEY_CODE && !galleryOverlay.classList.contains('invisible')) {
+    galleryOverlayClose.addEventListener('keydown', function (event) {
+      if (window.helpers.isEscapeKeyPressed(event) || window.helpers.isEnterKeyPressed(event) && !galleryOverlay.classList.contains('invisible')) {
         window.helpers.hideElement(galleryOverlay);
       }
     });
@@ -26,7 +26,6 @@ window.showGallery = (function () {
     galleryImage.setAttribute('src', pictureOptions.link);
     galleryLikes.textContent = pictureOptions.likesCount;
     galleryComments.textContent = pictureOptions.commentsCount;
-
     closeGallery();
   };
 })();

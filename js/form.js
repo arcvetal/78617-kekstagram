@@ -8,7 +8,6 @@
   var photo = uploadOverlay.querySelector('.filter-image-preview');
   var photoFilters = document.querySelectorAll('input[name=upload-filter]');
   var scaleBlock = document.querySelector('.upload-resize-controls-value');
-
   var i;
   var arrayLength;
 
@@ -25,14 +24,15 @@
   }
 
   resetScale();
+
   resetFilters();
 
   uploadFile.addEventListener('change', function () {
     window.helpers.showElement(uploadOverlay);
     window.helpers.hideElement(download);
     window.helpers.setAriaHiddenAttribute(uploadOverlay);
-    document.addEventListener('keydown', function (e) {
-      if (e.keyCode === window.helpers.ESC_KEY_CODE) {
+    document.addEventListener('keydown', function (event) {
+      if (window.helpers.isEscapeKeyPressed(event)) {
         window.helpers.showElement(download);
         window.helpers.hideElement(uploadOverlay);
         resetScale();
