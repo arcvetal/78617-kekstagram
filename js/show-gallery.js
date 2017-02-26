@@ -7,15 +7,19 @@ window.showGallery = (function () {
   var galleryLikes = galleryOverlay.querySelector('.likes-count');
   var galleryComments = galleryOverlay.querySelector('.comments-count');
 
-  function closeGallery() {
-    galleryOverlayClose.addEventListener('click', function () {
+  var onGalleryOverlayCloseClick = function () {
+    window.helpers.hideElement(galleryOverlay);
+  };
+
+  var onGalleryOverlayCloseKeydown = function (event) {
+    if (window.helpers.isEscapeKeyPressed(event) || window.helpers.isEnterKeyPressed(event) && !galleryOverlay.classList.contains('invisible')) {
       window.helpers.hideElement(galleryOverlay);
-    });
-    galleryOverlayClose.addEventListener('keydown', function (event) {
-      if (window.helpers.isEscapeKeyPressed(event) || window.helpers.isEnterKeyPressed(event) && !galleryOverlay.classList.contains('invisible')) {
-        window.helpers.hideElement(galleryOverlay);
-      }
-    });
+    }
+  };
+
+  function closeGallery() {
+    galleryOverlayClose.addEventListener('click', onGalleryOverlayCloseClick);
+    galleryOverlayClose.addEventListener('keydown', onGalleryOverlayCloseKeydown);
   }
 
   return function (pictureOptions) {
