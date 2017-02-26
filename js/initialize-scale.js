@@ -12,16 +12,20 @@ window.initializeScale = (function () {
   }
 
   return function (options) {
-    options.btnIncr.addEventListener('click', function (event) {
+    var onBtnIncrclick = function (event) {
       event.isIncremented = true;
       event.isDecremented = false;
       scaleElement(options, event);
-    });
+    };
 
-    options.btnDecr.addEventListener('click', function (event) {
+    var onBtnDecrClick = function (event) {
       event.isIncremented = false;
       event.isDecremented = true;
       scaleElement(options, event);
-    });
+    };
+
+    options.btnIncr.addEventListener('click', onBtnIncrclick);
+
+    options.btnDecr.addEventListener('click', onBtnDecrClick);
   };
 })();

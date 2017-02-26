@@ -1,24 +1,51 @@
 'use strict';
 
 (function () {
-  var uploadFile = document.querySelector('#upload-file');
+  var fileInput = document.querySelector('#upload-file');
   var uploadOverlay = document.querySelector('.upload-overlay');
-  var download = document.querySelector('#upload-select-image');
-  var btnClose = uploadOverlay.querySelector('.upload-form-cancel');
-  var photo = uploadOverlay.querySelector('.filter-image-preview');
+  var downloadForm = document.querySelector('#upload-select-image');
+  var btnCloseForm = uploadOverlay.querySelector('.upload-form-cancel');
+  var photoPreview = uploadOverlay.querySelector('.filter-image-preview');
   var photoFilters = document.querySelectorAll('input[name=upload-filter]');
-  var scaleBlock = document.querySelector('.upload-resize-controls-value');
+  var resizeBlock = document.querySelector('.upload-resize-controls-value');
+  var defaultScaleBlockValue = 100;
   var i;
   var arrayLength;
 
+  var onDocumentKeydown = function (event) {
+    if (window.helpers.isEscapeKeyPressed(event)) {
+      window.helpers.showElement(downloadForm);
+      window.helpers.hideElement(uploadOverlay);
+      resetScale();
+      resetFilters();
+      window.helpers.setAriaHiddenAttribute(uploadOverlay);
+    }
+  };
+
+  var onFileInputChange = function () {
+    window.helpers.showElement(uploadOverlay);
+    window.helpers.hideElement(downloadForm);
+    window.helpers.setAriaHiddenAttribute(uploadOverlay);
+
+    document.addEventListener('keydown', onDocumentKeydown);
+  };
+
+  var onBntCloseClick = function () {
+    window.helpers.showElement(downloadForm);
+    window.helpers.hideElement(uploadOverlay);
+    resetScale();
+    resetFilters();
+    window.helpers.setAriaHiddenAttribute(uploadOverlay);
+  };
+
   function resetScale() {
-    photo.removeAttribute('style');
-    scaleBlock.value = 100;
+    photoPreview.removeAttribute('style');
+    resizeBlock.value = defaultScaleBlockValue;
   }
 
   function resetFilters() {
     for (i = 0, arrayLength = photoFilters.length; i < arrayLength; i++) {
-      photo.classList.remove('filter-' + photoFilters[i].value);
+      photoPreview.classList.remove('filter-' + photoFilters[i].value);
     }
     photoFilters[0].checked = true;
   }
@@ -27,28 +54,9 @@
 
   resetFilters();
 
-  uploadFile.addEventListener('change', function () {
-    window.helpers.showElement(uploadOverlay);
-    window.helpers.hideElement(download);
-    window.helpers.setAriaHiddenAttribute(uploadOverlay);
-    document.addEventListener('keydown', function (event) {
-      if (window.helpers.isEscapeKeyPressed(event)) {
-        window.helpers.showElement(download);
-        window.helpers.hideElement(uploadOverlay);
-        resetScale();
-        resetFilters();
-        window.helpers.setAriaHiddenAttribute(uploadOverlay);
-      }
-    });
-  });
+  fileInput.addEventListener('change', onFileInputChange);
 
-  btnClose.addEventListener('click', function () {
-    window.helpers.showElement(download);
-    window.helpers.hideElement(uploadOverlay);
-    resetScale();
-    resetFilters();
-    window.helpers.setAriaHiddenAttribute(uploadOverlay);
-  });
+  btnCloseForm.addEventListener('click', onBntCloseClick);
 
   window.initializeScale({
     btnIncr: document.querySelector('.upload-resize-controls-button-inc'),
@@ -59,13 +67,12 @@
     resizeStep: 25,
     elementForScaling: document.querySelector('.filter-image-preview'),
     callback: function (elementForScaling) {
-      elementForScaling.setAttribute('style', 'transform: scale(' + scaleBlock.value / 100 + ')');
+      elementForScaling.setAttribute('style', 'transform: scale(' + resizeBlock.value / this.resizeUpperLimit + ')');
     },
   });
 
   window.initializeFilters({
     blockOfFilters: document.querySelector('.upload-filter-controls'),
-    ENTER_KEY_CODE: 13,
     elementForFiltering: document.querySelector('.filter-image-preview'),
     filters: document.querySelectorAll('input[name=upload-filter]'),
     callback: function (elementForFiltering, filters, blockOfFilters, event) {
