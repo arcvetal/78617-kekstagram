@@ -13,8 +13,6 @@
         var randomPictures = [];
         var reversedPictures = [];
 
-        // var onPictureClick =
-
         var onPictureFiltersClick = function (event) {
           filterPicturesContainer(event);
         };
@@ -59,9 +57,10 @@
         };
 
         pictures.forEach(function (pictureItem) {
-          picturesForRendering.push(createPicture(pictureItem));
-          pictureContainer.appendChild(createPicture(pictureItem));
-          addListenerToShowGallery(pictureItem, createPicture(pictureItem));
+          var newPicture = createPicture(pictureItem);
+          picturesForRendering.push(newPicture);
+          pictureContainer.appendChild(newPicture);
+          addListenerToShowGallery(pictureItem, newPicture);
         });
 
         function filterPicturesContainer(event) {
